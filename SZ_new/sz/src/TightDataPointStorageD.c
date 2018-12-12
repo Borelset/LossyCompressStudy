@@ -1465,15 +1465,13 @@ void new_TightDataPointStorageD_alter(TightDataPointStorageD **this,
 	memcpy((*this)->typeArray, type, dataSeriesLength*sizeof(unsigned short));
 	free(type);*/
 
-	// 由于加入了拟合的方法，所以高频出现的type都被屏蔽掉了，剩下的type都是离散程度很高的，使用huffman编码经常会出现负面效果。
-	// 这里可以把编码前和编码后的大小打印出来
+	// 由于加入了拟合的方法, huffman编码在某些例子中存在负面作用，编码后反而变得更大了。
 	// 其实也可以考虑加入一个判断来决定是否使用huffman编码
 	//for(i=0;i<dataSeriesLength;i++)
 	//	printf("%u\n", type[i]);
 	//encode_withTree(type, quantLength, &(*this)->typeArray, &(*this)->typeArray_size);
 
 	// 由于前面的范围限制，左右这里可以用2字节保存
-	// 这个地方应该可以加个判断用多少字节保存
     (*this)->typeArray = (unsigned char*)malloc(quantLength*sizeof(int16_t));
     int16_t* typePtr = (int16_t*)((*this)->typeArray);
     for(int i=0; i<quantLength; i++){
@@ -1486,6 +1484,7 @@ void new_TightDataPointStorageD_alter(TightDataPointStorageD **this,
 	memcpy((*this)->typeArray, type, quantLength*sizeof(int));
 	(*this)->typeArray_size = quantLength* sizeof(int);
 	 */
+	// 对于一般情况而言huffman编码也是把int型数组压缩到原先的一半左右，和直接转换为2字节相比大小也没什么变化。这里应该可以引入策略。
 
     printf("before:%d, after:%d\n", quantLength*sizeof(int), (*this)->typeArray_size);
 
