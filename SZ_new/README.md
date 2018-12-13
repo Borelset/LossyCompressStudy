@@ -8,5 +8,6 @@ make
 
 run
 ```
-source ../test/sz.sh
+cd test
+source sz.sh
 ```
