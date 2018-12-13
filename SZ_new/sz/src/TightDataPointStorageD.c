@@ -1471,7 +1471,8 @@ void new_TightDataPointStorageD_alter(TightDataPointStorageD **this,
 	//	printf("%u\n", type[i]);
 	//encode_withTree(type, quantLength, &(*this)->typeArray, &(*this)->typeArray_size);
 
-	// 由于前面的范围限制，左右这里可以用2字节保存
+	// 由于config中max_quant_intervals的范围限制，所以这里可以用2字节保存
+	// 这个地方应该可以加个判断用多少bits保存
     (*this)->typeArray = (unsigned char*)malloc(quantLength*sizeof(int16_t));
     int16_t* typePtr = (int16_t*)((*this)->typeArray);
     for(int i=0; i<quantLength; i++){
